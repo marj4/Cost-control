@@ -3,24 +3,48 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"image/color"
 )
 
 func main() {
 	a := app.New()
 	b := a.NewWindow("Cost control")
-	b.Resize(fyne.NewSize(300, 500))
-	entry := widget.NewEntry()
-	entry2 := widget.NewEntry()
-	line := canvas.NewLine(color.Black)
-	container1 := container.NewVBox(entry)
-	container2 := container.NewVBox(entry2)
-	container_all := container.NewBorder(nil, nil, container1, container2, line)
+	//entry := widget.NewEntry()
+	//entry2 := widget.NewEntry()
 
-	b.SetContent(container.NewHBox(container_all))
+	labelWalet := widget.NewLabel("		Wallet")
+	labelCard := widget.NewLabel("     			 		Card")
+
+	//line := canvas.NewLine(color.Black)
+
+	InputWallet := container.NewVBox(
+		widget.NewEntry(),
+	)
+	InputCard := container.NewVBox(
+		widget.NewEntry(),
+	)
+
+	containerLabel := container.NewHBox(labelWalet, labelCard)
+
+	container_all := container.NewGridWithColumns(2,
+		container.NewVBox(InputWallet),
+		container.NewVBox(InputCard),
+	)
+
+	containerScroll := container.NewScroll(container_all)
+	var h float32 = 100
+	containerScroll.SetMinSize(fyne.NewSize(300, h))
+	//containerScroll.Resize(fyne.NewSize(400, 500))
+
+	button := widget.NewButton("+", func() {
+		InputWallet.Add(widget.NewEntry())
+		InputCard.Add(widget.NewEntry())
+		h = h + 100
+	})
+
+	b.SetContent(container.NewVBox(container.NewVBox(containerLabel, containerScroll, button)))
+	b.Resize(fyne.NewSize(500, 600))
 	b.CenterOnScreen()
 	b.ShowAndRun()
 }
