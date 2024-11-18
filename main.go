@@ -7,14 +7,21 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+const (
+	appName = "Cost control"
+	Wallet  = "		Wallet"
+	Card    = "     			 		Card"
+	addCost = "Add cost"
+)
+
 func main() {
 	a := app.New()
-	b := a.NewWindow("Cost control")
+	b := a.NewWindow(appName)
 	//entry := widget.NewEntry()
 	//entry2 := widget.NewEntry()
 
-	labelWalet := widget.NewLabel("		Wallet")
-	labelCard := widget.NewLabel("     			 		Card")
+	labelWalet := widget.NewLabel(Wallet)
+	labelCard := widget.NewLabel(Card)
 
 	//line := canvas.NewLine(color.Black)
 
@@ -33,18 +40,26 @@ func main() {
 	)
 
 	containerScroll := container.NewScroll(container_all)
-	var h float32 = 100
+	var h float32 = 40
 	containerScroll.SetMinSize(fyne.NewSize(300, h))
 	//containerScroll.Resize(fyne.NewSize(400, 500))
 
-	button := widget.NewButton("+", func() {
+	button := widget.NewButton(addCost, func() {
 		InputWallet.Add(widget.NewEntry())
 		InputCard.Add(widget.NewEntry())
-		h = h + 100
+		//	h = h + 100
+		h += 40
+		if h < 470 {
+			containerScroll.SetMinSize(fyne.NewSize(300, h))
+		} else {
+			containerScroll.SetMinSize(fyne.NewSize(300, 470))
+		}
 	})
+	button2 := widget.NewButton("", func() {})
 
-	b.SetContent(container.NewVBox(container.NewVBox(containerLabel, containerScroll, button)))
+	b.SetContent(container.NewVBox(container.NewVBox(containerLabel, containerScroll, button, button2)))
 	b.Resize(fyne.NewSize(500, 600))
+	b.SetFixedSize(true)
 	b.CenterOnScreen()
 	b.ShowAndRun()
 }
